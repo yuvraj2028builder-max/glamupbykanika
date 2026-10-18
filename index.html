@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#FAFAF8" />
+<title>Glamup by Kanika — Instant Bridal Quote Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          cream: "#FAFAF8",
+          tint: "#F5F5F0",
+          ink: "#111111",
+          gold: "#C59B27",
+          champagne: "#8A6A1B",
+          muted: "#555555",
+        },
+        fontFamily: {
+          sans: ['"Plus Jakarta Sans"', "-apple-system", "BlinkMacSystemFont", "ui-sans-serif", "system-ui", "sans-serif"],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #FAFAF8;
+    --surface: #FFFFFF;
+    --line: #EFEFEF;
+    --line-strong: #E2E2E2;
+    --tint: #F5F5F0;
+    --ink: #111111;
+    --muted: #555555;
+    --gold: #C59B27;
+    --gold-soft: #8A6A1B;
+    --gold-tint: #FBF6E9;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --price-font: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, ui-sans-serif, system-ui, sans-serif;
+  }
+  * { -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: "cv11", "ss01";
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .ambient {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(860px 440px at 50% -10%, rgba(197, 155, 39, 0.07), transparent 62%),
+      radial-gradient(700px 540px at 112% 16%, rgba(197, 155, 39, 0.035), transparent 60%),
+      radial-gradient(780px 640px at -16% 86%, rgba(17, 17, 17, 0.025), transparent 62%);
+  }
+
+  ::selection { background: rgba(197, 155, 39, 0.24); }
+
+  .surface {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    transition: all 0.2s var(--ease);
+  }
+  @media (hover: hover) {
+    .surface:hover {
+      border-color: var(--line-strong);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  .checkout {
+    background: rgba(255, 255, 255, 0.9);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    backdrop-filter: blur(20px) saturate(1.4);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.03);
+    transition: all 0.2s var(--ease);
+  }
+
+  .gold-text {
+    background: linear-gradient(135deg, #D9B459 0%, #C59B27 48%, #9A7415 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .eyebrow {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8A8A8A;
+  }
+
+  .price {
+    font-family: var(--price-font);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .price .sym { color: inherit; }
+  .total {
+    font-family: var(--price-font);
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .total .sym { color: inherit; }
+  .total-sm { font-size: 1.5rem; }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    background: var(--gold-tint);
+    border: 1px solid rgba(197, 155, 39, 0.28);
+    color: var(--gold-soft);
+    padding: 4px 10px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .chip-plain {
+    background: #F7F7F5;
+    border: 1px solid #EAEAEA;
+    color: var(--muted);
+  }
+
+  .step-badge {
+    height: 28px;
+    min-width: 44px;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 11px;
+    border-radius: 999px;
+    background: var(--tint);
+    border: 1px solid #E8E8E3;
+    color: #777777;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    transition: all 0.2s var(--ease);
+  }
+  .step-badge svg { display: none; }
+  .step-badge.is-done {
+    background: var(--gold-tint);
+    border-color: rgba(197, 155, 39, 0.4);
+    color: var(--gold-soft);
+  }
+  .step-badge.is-done span { display: none; }
+  .step-badge.is-done svg { display: block; }
+
+  .opt {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 15px 16px;
+    text-align: left;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .opt:active { transform: scale(0.988); }
+  .opt.is-selected {
+    border: 2px solid var(--gold);
+    background: var(--tint);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    padding: 14px 15px;
+  }
+
+  .radio-dot {
+    width: 22px;
+    height: 22px;
+    flex: none;
+    border-radius: 999px;
+    border: 1.5px solid #D4D4D4;
+    display: grid;
+    place-items: center;
+    transition: all 0.2s var(--ease);
+  }
+  .radio-dot i {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--gold);
+    transform: scale(0);
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .opt.is-selected .radio-dot { border-color: var(--gold); background: #FFFFFF; }
+  .opt.is-selected .radio-dot i { transform: scale(1); }
+
+  .box {
+    width: 22px;
+    height: 22px;
+    flex: none;
+    border-radius: 7px;
+    border: 1.5px solid #D4D4D4;
+    background: #FFFFFF;
+    display: grid;
+    place-items: center;
+    transition: all 0.2s var(--ease);
+  }
+  .box svg { opacity: 0; transform: scale(0.4); transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .opt.is-selected .box {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+  .opt.is-selected .box svg { opacity: 1; transform: scale(1); }
+  .opt.is-selected .opt-price { color: var(--gold-soft); }
+
+  .qty { display: none; }
+  .opt.is-selected .qty { display: inline-flex; }
+  .qty button {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: #FFFFFF;
+    border: 1px solid #E2E2E2;
+    color: var(--ink);
+    font-family: var(--price-font);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s var(--ease);
+  }
+  .qty button:active { transform: scale(0.88); border-color: #BBBBBB; }
+  .qty button:disabled { opacity: 0.35; }
+
+  .field {
+    width: 100%;
+    border-radius: 14px;
+    background: var(--surface);
+    border: 1px solid #E5E5E5;
+    color: var(--ink);
+    padding: 13px 14px 13px 42px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    outline: none;
+    appearance: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    transition: all 0.2s var(--ease);
+  }
+  .field:hover { border-color: #D6D6D6; }
+  .field:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(197, 155, 39, 0.12);
+  }
+  .field.is-error { border-color: #DC2626; box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.10); }
+  input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.6; cursor: pointer; }
+  select.field option { background: #FFFFFF; color: var(--ink); }
+
+  .btn-gold {
+    background: #000000;
+    color: #FFFFFF;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    transition: all 0.2s var(--ease);
+  }
+  @media (hover: hover) {
+    .btn-gold:not(:disabled):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+  }
+  .btn-gold:active:not(:disabled) { transform: translateY(0) scale(0.982); }
+  .btn-gold:disabled { background: #C9C9C4; color: #FFFFFF; box-shadow: none; cursor: not-allowed; }
+  .btn-gold.is-locked,
+  .btn-gold.is-locked:hover {
+    background: #C9C9C4;
+    color: #FFFFFF;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .btn-gold.is-locked:active { transform: none; }
+
+  .banner {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(120deg, rgba(197, 155, 39, 0.12), rgba(197, 155, 39, 0.035));
+    border-bottom: 1px solid rgba(197, 155, 39, 0.18);
+  }
+  .banner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 38%;
+    background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    animation: sheen 4.8s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes sheen { 0% { transform: translateX(-140%); } 55%, 100% { transform: translateX(280%); } }
+
+  .sum-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 14px;
+    padding: 7px 0;
+    font-size: 13.5px;
+    animation: rowIn 0.25s var(--ease) both;
+  }
+  @keyframes rowIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  .sum-row span:first-child { color: var(--muted); font-weight: 500; letter-spacing: -0.01em; }
+  .sum-row .sum-amt { color: var(--ink); font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .empty-note { font-size: 13px; color: #777777; line-height: 1.65; padding: 4px 0; }
+  .divider { height: 1px; background: var(--line); margin: 16px 0; }
+
+  .progress-track { height: 5px; border-radius: 999px; background: #EFEFEA; overflow: hidden; }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--gold), #E2B857);
+    transition: width 0.45s var(--ease);
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(24px + env(safe-area-inset-bottom));
+    z-index: 60;
+    width: max-content;
+    max-width: min(92vw, 440px);
+    text-align: center;
+    background: #111111;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.45;
+    padding: 12px 18px;
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
+    transform: translate(-50%, 14px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.28s var(--ease), transform 0.28s var(--ease), visibility 0.28s;
+  }
+  .toast.is-visible { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+  .toast.is-error { background: #B42318; }
+  .toast.is-success { background: #067647; }
+  @media (max-width: 767.98px) {
+    .toast { bottom: calc(92px + env(safe-area-inset-bottom)); }
+  }
+
+  .float-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    transform: translateY(115%);
+    transition: transform 0.35s var(--ease);
+    padding-bottom: env(safe-area-inset-bottom);
+    background: rgba(255, 255, 255, 0.9);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    backdrop-filter: blur(20px) saturate(1.4);
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.05);
+  }
+  .float-bar.is-visible { transform: translateY(0); }
+
+  .bump { animation: bump 0.35s var(--ease); }
+  @keyframes bump { 0% { transform: scale(1); } 35% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+  @keyframes shake {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(3px); }
+    30%, 50%, 70% { transform: translateX(-5px); }
+    40%, 60% { transform: translateX(5px); }
+  }
+  .shake { animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { animation: fadeUp 0.55s var(--ease) both; }
+  .reveal-1 { animation-delay: 0.03s; }
+  .reveal-2 { animation-delay: 0.08s; }
+  .reveal-3 { animation-delay: 0.13s; }
+  .reveal-4 { animation-delay: 0.18s; }
+  .reveal-5 { animation-delay: 0.23s; }
+
+  .nav-blur {
+    background: rgba(250, 250, 248, 0.82);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    backdrop-filter: blur(20px) saturate(1.4);
+    border-bottom: 1px solid var(--line);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body class="antialiased">
+<div class="ambient" aria-hidden="true"></div>
+
+<nav class="nav-blur sticky top-0 z-40">
+  <div class="mx-auto flex w-full max-w-[1100px] items-center gap-3 px-5 py-3.5 lg:px-8">
+    <div class="grid h-9 w-9 flex-none place-items-center rounded-[10px] border border-gold/40 bg-cream">
+      <span id="logoInitials" class="text-[13px] font-extrabold tracking-tight gold-text">GK</span>
+    </div>
+    <div class="min-w-0">
+      <p id="studioName" class="truncate text-[14px] font-extrabold leading-tight tracking-[-0.01em] text-ink">Glamup by Kanika</p>
+      <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-[#999999]">Delhi NCR</p>
+    </div>
+    <div class="ml-auto hidden items-center gap-2 md:flex">
+      <span class="chip chip-plain">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="#C59B27"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.8 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg>
+        4.9 · 800+ brides
+      </span>
+      <a id="phoneLink" href="tel:+919999733100" class="chip chip-plain transition-all duration-200 hover:text-ink">+91 99997 33100</a>
+    </div>
+  </div>
+</nav>
+
+<main class="mx-auto w-full max-w-[1100px] px-5 pb-36 pt-10 lg:px-8 lg:pb-24">
+
+  <header class="reveal reveal-1 max-w-[640px]">
+    <span class="chip">Instant Quote Builder · No sign-up</span>
+    <h1 class="mt-5 text-[32px] font-extrabold leading-[1.08] tracking-[-0.03em] text-ink sm:text-[40px] lg:text-[44px]">
+      Your bridal look,
+      <span class="gold-text">priced instantly.</span>
+    </h1>
+    <p class="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-muted">
+      Configure your package, see transparent pricing update in real time, and reserve your date on WhatsApp in under a minute.
+    </p>
+    <div class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[12px] font-medium text-[#8A8A8A]">
+      <span>South Ex</span><span class="h-1 w-1 rounded-full bg-black/15"></span>
+      <span>Rajouri Garden</span><span class="h-1 w-1 rounded-full bg-black/15"></span>
+      <span>Gurgaon</span><span class="h-1 w-1 rounded-full bg-black/15"></span>
+      <span>Trial &amp; travel included on request</span>
+    </div>
+  </header>
+
+  <div class="mt-10 grid gap-6 lg:grid-cols-12 lg:gap-10">
+
+    <div class="space-y-10 lg:col-span-7">
+
+      <section class="reveal reveal-2">
+        <div class="mb-4 flex items-center gap-3">
+          <span class="step-badge" data-step-badge="1">
+            <span>01</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </span>
+          <div class="min-w-0">
+            <h2 class="text-[15.5px] font-extrabold tracking-[-0.01em] text-ink">Packages</h2>
+            <p class="text-[12px] text-muted">Select one or more looks for your wedding functions</p>
+          </div>
+        </div>
+
+        <div class="space-y-3" role="group" aria-label="Packages">
+          <button type="button" class="opt surface" data-package="party" role="checkbox" aria-checked="false">
+            <span class="box">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </span>
+            <span class="min-w-0 flex-1">
+              <span class="flex flex-wrap items-center gap-2">
+                <span class="text-[14.5px] font-bold tracking-[-0.01em] text-ink">Party Makeup</span>
+              </span>
+            </span>
+            <span class="opt-price price text-[14.5px] text-ink">₹4,000</span>
+          </button>
+
+          <button type="button" class="opt surface" data-package="haldi" role="checkbox" aria-checked="false">
+            <span class="box">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </span>
+            <span class="min-w-0 flex-1">
+              <span class="flex flex-wrap items-center gap-2">
+                <span class="text-[14.5px] font-bold tracking-[-0.01em] text-ink">Haldi Makeup</span>
+              </span>
+            </span>
+            <span class="opt-price price text-[14.5px] text-ink">₹4,000</span>
+          </button>
+
+          <button type="button" class="opt surface" data-package="engagement" role="checkbox" aria-checked="false">
+            <span class="box">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </span>
+            <span class="min-w-0 flex-1">
+              <span class="flex flex-wrap items-center gap-2">
+                <span class="text-[14.5px] font-bold tracking-[-0.01em] text-ink">Engagement Makeup</span>
+              </span>
+            </span>
+            <span class="opt-price price text-[14.5px] text-ink">₹6,000</span>
+          </button>
+
+          <button type="button" class="opt surface" data-package="bridal" role="checkbox" aria-checked="false">
+            <span class="box">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </span>
+            <span class="min-w-0 flex-1">
+              <span class="flex flex-wrap items-center gap-2">
+                <span class="text-[14.5px] font-bold tracking-[-0.01em] text-ink">Bridal Makeup</span>
+              </span>
+            </span>
+            <span class="opt-price price text-[14.5px] text-ink">₹12,000</span>
+          </button>
+
+          <button type="button" class="opt surface" data-package="hd" role="checkbox" aria-checked="false">
+            <span class="box">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </span>
+            <span class="min-w-0 flex-1">
+              <span class="flex flex-wrap items-center gap-2">
+                <span class="text-[14.5px] font-bold tracking-[-0.01em] text-ink">HD Bridal Makeup</span>
+                <span class="chip">Most Popular</span>
+              </span>
+            </span>
+            <span class="opt-price price text-[14.5px] text-ink">₹15,000</span>
+          </button>
+
+          <button type="button" class="opt surface" data-package="airbrush" role="checkbox" aria-checked="false">
+            <span class="box">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </span>
+            <span class="min-w-0 flex-1">
+              <span class="flex flex-wrap items-center gap-2">
+                <span class="text-[14.5px] font-bold tracking-[-0.01em] text-ink">Airbrush Bridal Makeup</span>
+                <span class="chip">Signature</span>
+              </span>
+            </span>
+            <span class="opt-price price text-[14.5px] text-ink">₹20,000</span>
+          </button>
+
+          <button type="button" class="opt surface" data-package="reception" role="checkbox" aria-checked="false">
+            <span class="box">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </span>
+            <span class="min-w-0 flex-1">
+              <span class="flex flex-wrap items-center gap-2">
+                <span class="text-[14.5px] font-bold tracking-[-0.01em] text-ink">Reception Makeup</span>
+              </span>
+            </span>
+            <span class="opt-price price text-[14.5px] text-ink">₹12,000</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="reveal reveal-4">
+        <div class="mb-4 flex items-center gap-3">
+          <span class="step-badge" data-step-badge="2">
+            <span>02</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </span>
+          <div class="min-w-0">
+            <h2 class="text-[15.5px] font-extrabold tracking-[-0.01em] text-ink">Date &amp; Location</h2>
+            <p class="text-[12px] text-muted">We confirm availability instantly on WhatsApp</p>
+          </div>
+        </div>
+
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div class="relative">
+            <svg class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gold" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+            <input id="dateInput" type="date" class="field" aria-label="Event date" />
+          </div>
+          <div class="relative">
+            <svg class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gold" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.1 7-11a7 7 0 10-14 0c0 5.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            <select id="locationSelect" class="field" aria-label="Event location">
+              <option value="Delhi">Delhi</option>
+              <option value="Gurgaon">Gurgaon</option>
+              <option value="Noida">Noida</option>
+              <option value="Outstation">Outstation</option>
+            </select>
+            <svg class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#999999]" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+
+        <p id="dateHint" class="mt-3 flex items-center gap-1.5 pl-1 text-[12px] text-muted">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          Select your event date to unlock booking.
+        </p>
+      </section>
+    </div>
+
+    <aside class="reveal reveal-5 lg:col-span-5 lg:self-start">
+      <div id="summaryCard" class="checkout overflow-hidden lg:sticky lg:top-8">
+
+        <div class="banner flex items-center gap-2.5 px-5 py-3">
+          <svg class="flex-none text-gold" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4.5 13.5H11L10 22l8.5-11.5H12L13 2z"/></svg>
+          <p class="text-[12px] font-bold tracking-[-0.01em] text-champagne">Book now to freeze current wedding season rates</p>
+        </div>
+
+        <div class="p-5 lg:p-6">
+
+          <div class="mb-5">
+            <div class="mb-2 flex items-center justify-between">
+              <span id="progressLabel" class="eyebrow">0 of 2 steps ready</span>
+              <span id="progressPct" class="price text-[11px] text-champagne">0%</span>
+            </div>
+            <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <h2 class="text-[15.5px] font-extrabold tracking-[-0.01em] text-ink">Live Estimate</h2>
+            <span class="chip">
+              <span class="relative flex h-1.5 w-1.5">
+                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-60"></span>
+                <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-gold"></span>
+              </span>
+              Real-time
+            </span>
+          </div>
+
+          <div id="breakdown" class="mt-3">
+            <p class="empty-note">Select your packages to see your live estimate. Every change updates the total instantly.</p>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="flex items-end justify-between gap-4">
+            <div>
+              <p class="eyebrow">Estimated Total</p>
+              <p class="mt-1.5 text-[11.5px] text-muted">Inclusive of taxes</p>
+            </div>
+            <p id="totalAmount" class="total"><span class="sym">₹</span>0</p>
+          </div>
+
+          <div id="depositRow" class="mt-4 hidden items-center justify-between rounded-2xl border border-gold/25 bg-gold/[0.06] px-4 py-3">
+            <span class="flex items-center gap-2 text-[12.5px] font-medium text-muted">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C59B27" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7.5a4 4 0 018 0V10"/></svg>
+              25% Retainer to Book
+            </span>
+            <span id="depositAmount" class="price text-[13.5px] text-champagne">₹0</span>
+          </div>
+
+          <button id="ctaButton" type="button" aria-disabled="true"
+            class="btn-gold is-locked mt-4 flex w-full items-center justify-center gap-2.5 rounded-full py-4 text-[15px]">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.17-1.42-.07-.12-.27-.2-.57-.35zM12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.96L2 22l5.25-1.38a9.87 9.87 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.15h-.01a8.23 8.23 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 01-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24a8.24 8.24 0 018.24 8.25c0 4.54-3.7 8.23-8.24 8.23z"/></svg>
+            Reserve Slot on WhatsApp
+          </button>
+
+          <p class="mt-3.5 text-center text-[11.5px] text-muted">Usually replies within 10 minutes · 9 AM – 9 PM</p>
+
+          <button id="resetButton" type="button" class="mx-auto mt-3 flex items-center justify-center gap-2 rounded-full border border-[#E5E5E5] bg-white px-5 py-2.5 text-[12.5px] font-bold tracking-[-0.01em] text-muted transition-all duration-200 hover:border-[#D4D4D4] hover:text-ink">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4.5A1.5 1.5 0 019.5 3h5A1.5 1.5 0 0116 4.5V6m3 0l-.8 12.2A2 2 0 0116.2 20H7.8a2 2 0 01-2-1.8L5 6"/></svg>
+            Clear All
+          </button>
+        </div>
+      </div>
+
+      <p class="mt-4 hidden text-center text-[11px] leading-relaxed text-[#9A9A9A] lg:block">
+        Estimates are indicative. Final quote confirmed after look consultation.<br />
+        © <span data-studio-name>Glamup by Kanika</span> · Delhi NCR
+      </p>
+    </aside>
+  </div>
+
+  <p class="mt-10 text-center text-[11px] leading-relaxed text-[#9A9A9A] lg:hidden">
+    Estimates are indicative. Final quote confirmed after look consultation.<br />
+    © <span data-studio-name>Glamup by Kanika</span> · Delhi NCR
+  </p>
+</main>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<div id="floatBar" class="float-bar md:hidden">
+  <div class="mx-auto flex w-full max-w-[1100px] items-center gap-3 px-5 py-3">
+    <div class="min-w-0">
+      <p class="eyebrow text-[9.5px]">Total</p>
+      <p id="floatTotal" class="total total-sm"><span class="sym">₹</span>0</p>
+    </div>
+    <button id="floatButton" type="button" aria-disabled="true" class="btn-gold is-locked ml-auto flex flex-none items-center gap-2 rounded-full px-5 py-3 text-[13px]">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.17-1.42-.07-.12-.27-.2-.57-.35zM12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.96L2 22l5.25-1.38a9.87 9.87 0 004.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.15h-.01a8.23 8.23 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 01-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24a8.24 8.24 0 018.24 8.25c0 4.54-3.7 8.23-8.24 8.23z"/></svg>
+      Book on WhatsApp
+    </button>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var DEFAULT_STUDIO = "Glamup by Kanika";
+  var DEFAULT_PHONE = "919999733100";
+
+  var urlParams = new URLSearchParams(window.location.search);
+  var studioParam = (urlParams.get("studio") || "").trim();
+  var phoneParam = (urlParams.get("phone") || "").replace(/\D/g, "");
+  var STUDIO_NAME = studioParam || DEFAULT_STUDIO;
+  var WHATSAPP_NUMBER = phoneParam || DEFAULT_PHONE;
+
+  var PACKAGES = [
+    { id: "party", name: "Party Makeup", price: 4000 },
+    { id: "haldi", name: "Haldi Makeup", price: 4000 },
+    { id: "engagement", name: "Engagement Makeup", price: 6000 },
+    { id: "bridal", name: "Bridal Makeup", price: 12000 },
+    { id: "hd", name: "HD Bridal Makeup", price: 15000 },
+    { id: "airbrush", name: "Airbrush Bridal Makeup", price: 20000 },
+    { id: "reception", name: "Reception Makeup", price: 12000 }
+  ];
+
+  var state = {
+    selected: {},
+    date: "",
+    location: "Delhi"
+  };
+
+  var packageCards = {};
+  var lastTotal = -1;
+  var toastTimer = null;
+  var scrollScheduled = false;
+
+  function $(selector) { return document.querySelector(selector); }
+
+  function studioInitials(name) {
+    var words = name.split(/\s+/);
+    var initials = "";
+    for (var i = 0; i < words.length && initials.length < 2; i++) {
+      if (/^(by|and|the|of)$/i.test(words[i])) continue;
+      var ch = words[i].charAt(0).toUpperCase();
+      if (/[A-Z0-9]/.test(ch)) initials += ch;
+    }
+    return initials || "GK";
+  }
+
+  function prettyPhone(num) {
+    var digits = String(num).replace(/\D/g, "");
+    if (digits.length === 12 && digits.slice(0, 2) === "91") {
+      return "+91 " + digits.slice(2, 7) + " " + digits.slice(7);
+    }
+    return "+" + digits;
+  }
+
+  function applyBranding() {
+    var nameEl = $("#studioName");
+    if (nameEl) nameEl.textContent = STUDIO_NAME;
+
+    var initialsEl = $("#logoInitials");
+    if (initialsEl) initialsEl.textContent = studioInitials(STUDIO_NAME);
+
+    document.title = STUDIO_NAME + " \u2014 Instant Bridal Quote Builder";
+
+    var phoneLink = $("#phoneLink");
+    if (phoneLink) {
+      phoneLink.setAttribute("href", "tel:+" + WHATSAPP_NUMBER);
+      phoneLink.textContent = prettyPhone(WHATSAPP_NUMBER);
+    }
+
+    document.querySelectorAll("[data-studio-name]").forEach(function (el) {
+      el.textContent = STUDIO_NAME;
+    });
+  }
+
+  function fmt(n) { return "\u20B9" + Number(n).toLocaleString("en-IN"); }
+
+  function fmtHTML(n) {
+    return '<span class="sym">\u20B9</span>' + Number(n).toLocaleString("en-IN");
+  }
+
+  function selectedPackages() {
+    return PACKAGES.filter(function (p) { return state.selected[p.id]; });
+  }
+
+  function lineItems() {
+    return selectedPackages().map(function (p) { return { label: p.name, amount: p.price }; });
+  }
+
+  function totalOf(items) {
+    return items.reduce(function (sum, i) { return sum + i.amount; }, 0);
+  }
+
+  function depositOf(total) {
+    return Math.round((total * 0.25) / 100) * 100;
+  }
+
+  function prettyDate(value) {
+    if (!value) return "Not selected";
+    var d = new Date(value + "T00:00:00");
+    if (isNaN(d.getTime())) return "Not selected";
+    return d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+  }
+
+  function anyPackageSelected() {
+    return PACKAGES.some(function (p) { return state.selected[p.id]; });
+  }
+
+  function pulse(el) {
+    if (!el) return;
+    el.classList.remove("shake");
+    void el.offsetWidth;
+    el.classList.add("shake");
+    window.setTimeout(function () { el.classList.remove("shake"); }, 650);
+  }
+
+  function bump(el) {
+    if (!el) return;
+    el.classList.remove("bump");
+    void el.offsetWidth;
+    el.classList.add("bump");
+  }
+
+  function clearErrors() {
+    $("#dateInput").classList.remove("is-error");
+  }
+
+  function showToast(message, variant) {
+    var toast = $("#toast");
+    toast.textContent = message;
+    toast.classList.remove("is-error", "is-success");
+    if (variant) toast.classList.add("is-" + variant);
+    toast.classList.add("is-visible");
+    if (toastTimer) window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(function () { toast.classList.remove("is-visible"); }, 3200);
+  }
+
+  function updateSelections() {
+    PACKAGES.forEach(function (p) {
+      var card = packageCards[p.id];
+      var active = Boolean(state.selected[p.id]);
+      card.classList.toggle("is-selected", active);
+      card.setAttribute("aria-checked", active ? "true" : "false");
+    });
+  }
+
+  function updateSummary() {
+    var items = lineItems();
+    var total = totalOf(items);
+    var breakdown = $("#breakdown");
+
+    if (!items.length) {
+      breakdown.innerHTML = '<p class="empty-note">Select your packages to see your live estimate. Every change updates the total instantly.</p>';
+    } else {
+      breakdown.innerHTML = items.map(function (i) {
+        return '<div class="sum-row"><span>' + i.label + '</span><span class="sum-amt">' + fmt(i.amount) + '</span></div>';
+      }).join("");
+    }
+
+    $("#totalAmount").innerHTML = fmtHTML(total);
+    $("#floatTotal").innerHTML = fmtHTML(total);
+    if (total !== lastTotal) {
+      bump($("#totalAmount"));
+      bump($("#floatTotal"));
+      lastTotal = total;
+    }
+
+    var depositRow = $("#depositRow");
+    if (total > 0) {
+      depositRow.classList.remove("hidden");
+      depositRow.classList.add("flex");
+      $("#depositAmount").textContent = fmt(depositOf(total));
+    } else {
+      depositRow.classList.add("hidden");
+      depositRow.classList.remove("flex");
+    }
+
+    var ready = anyPackageSelected() && Boolean(state.date);
+    var ctaButton = $("#ctaButton");
+    var floatButton = $("#floatButton");
+    ctaButton.setAttribute("aria-disabled", ready ? "false" : "true");
+    ctaButton.classList.toggle("is-locked", !ready);
+    floatButton.setAttribute("aria-disabled", ready ? "false" : "true");
+    floatButton.classList.toggle("is-locked", !ready);
+
+    updateFloatBar();
+  }
+
+  function updateFloatBar() {
+    var hasSelection = anyPackageSelected();
+    var atTop = window.scrollY < 120;
+    $("#floatBar").classList.toggle("is-visible", hasSelection || !atTop);
+  }
+
+  function updateProgress() {
+    var done = (anyPackageSelected() ? 1 : 0) + (state.date ? 1 : 0);
+    var pct = Math.round((done / 2) * 100);
+    $("#progressFill").style.width = pct + "%";
+    $("#progressPct").textContent = pct + "%";
+    $("#progressLabel").textContent = done === 2 ? "Ready to book" : done + " of 2 steps ready";
+    $('[data-step-badge="1"]').classList.toggle("is-done", anyPackageSelected());
+    $('[data-step-badge="2"]').classList.toggle("is-done", Boolean(state.date));
+  }
+
+  function updateHints() {
+    var dateHint = $("#dateHint");
+    if (state.date) {
+      dateHint.innerHTML = 'Date locked for your estimate: <span class="font-bold text-champagne">' + prettyDate(state.date) + "</span>";
+    } else {
+      dateHint.textContent = "Select your event date to unlock booking.";
+    }
+  }
+
+  function updateUI() {
+    updateSelections();
+    updateSummary();
+    updateProgress();
+    updateHints();
+  }
+
+  function buildMessage() {
+    var pkgs = selectedPackages();
+    var total = totalOf(lineItems());
+
+    var lines = [];
+    lines.push("Hello " + STUDIO_NAME + "! \u2728");
+    lines.push("I generated a custom quote on your website:");
+    lines.push("");
+    lines.push("\uD83D\uDCCB Selected Packages:");
+    pkgs.forEach(function (p) {
+      lines.push("\u2022 " + p.name + " (" + fmt(p.price) + ")");
+    });
+    lines.push("");
+    lines.push("\uD83D\uDCC5 Event Date: " + prettyDate(state.date));
+    lines.push("\uD83D\uDCCD Location: " + state.location);
+    lines.push("");
+    lines.push("\uD83D\uDCB0 Estimated Total: " + fmt(total));
+    lines.push("\uD83D\uDD12 25% Slot Booking Token: " + fmt(depositOf(total)));
+    lines.push("");
+    lines.push("Please confirm if this slot is available!");
+    return lines.join("\n");
+  }
+
+  function openWhatsApp() {
+    if (!anyPackageSelected()) {
+      showToast("Please select at least one package first", "error");
+      var mainSection = $('[data-step-badge="1"]').closest("section");
+      pulse(mainSection);
+      mainSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    if (!state.date) {
+      var dateInput = $("#dateInput");
+      dateInput.classList.add("is-error");
+      pulse(dateInput);
+      dateInput.scrollIntoView({ behavior: "smooth", block: "center" });
+      showToast("Please pick your event date to reserve the slot", "error");
+      return;
+    }
+    var url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(buildMessage());
+    window.open(url, "_blank", "noopener");
+  }
+
+  function init() {
+    applyBranding();
+
+    document.querySelectorAll(".opt[data-package]").forEach(function (card) {
+      var id = card.getAttribute("data-package");
+      packageCards[id] = card;
+
+      card.addEventListener("click", function () {
+        state.selected[id] = !state.selected[id];
+        clearErrors();
+        updateUI();
+      });
+
+      card.addEventListener("keydown", function (e) {
+        if (e.key === " " || e.key === "Enter") {
+          e.preventDefault();
+          state.selected[id] = !state.selected[id];
+          clearErrors();
+          updateUI();
+        }
+      });
+    });
+
+    var dateInput = $("#dateInput");
+    var today = new Date();
+    dateInput.min = today.getFullYear() + "-" +
+      String(today.getMonth() + 1).padStart(2, "0") + "-" +
+      String(today.getDate()).padStart(2, "0");
+    dateInput.addEventListener("change", function () {
+      state.date = dateInput.value;
+      dateInput.classList.remove("is-error");
+      clearErrors();
+      updateUI();
+    });
+
+    var locationSelect = $("#locationSelect");
+    locationSelect.addEventListener("change", function () {
+      state.location = locationSelect.value;
+      updateUI();
+    });
+
+    $("#ctaButton").addEventListener("click", openWhatsApp);
+    $("#floatButton").addEventListener("click", openWhatsApp);
+
+    $("#resetButton").addEventListener("click", function () {
+      state.selected = {};
+      state.date = "";
+      state.location = "Delhi";
+      dateInput.value = "";
+      locationSelect.value = "Delhi";
+      clearErrors();
+      updateUI();
+      showToast("All selections cleared", "success");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    window.addEventListener("scroll", function () {
+      if (scrollScheduled) return;
+      scrollScheduled = true;
+      window.requestAnimationFrame(function () {
+        scrollScheduled = false;
+        updateFloatBar();
+      });
+    }, { passive: true });
+    window.addEventListener("resize", updateFloatBar);
+
+    updateUI();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
